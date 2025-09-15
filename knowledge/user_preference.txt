@@ -1,4 +1,8 @@
-User name is John Doe.
-User is an AI Engineer.
-User is interested in AI Agents.
-User is based in San Francisco, California.
+User name is Zicheng Ma.
+Here is his introduction about technical background and experience:
+My name is Zicheng Ma. I am currently a graduate student at Harvard, majoring in Computational Science and Engineering. I graduated with Highest Honor in Computer Engineering from University of Illinois at Urbana-Champaign and Zhejiang University.
+This summer (May–Aug 2025), I interned at NVIDIA with the Dynamo team, focusing on building great distributed system for LLM inference. 
+Previously, I interned at Microsoft DKI group, gaining insights in ML for systems, and cloud services. I also worked at UIUC x-lab with Xudong Sun on the verifiable controller framework Anvil, which was accepted by OSDI 24 and won best paper.
+
+Here is his introduction about his hobby:
+I am a deep coffee lover.☕️ Drinking and brewing coffee has become an unattainable part of my life. I love drinking pour-over coffee and prefer light roast coffee with good acidity and cleanliness. Every time I taste those wonderful flavors in coffee, such as jasmine, citrus, strawberry, etc., I feel a sense of happiness.
