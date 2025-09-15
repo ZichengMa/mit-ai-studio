@@ -26,3 +26,14 @@ brew_task:
     each section's time of brewing, whether to water in a circular pattern or not.
     Formatted as markdown without '```'
   agent: barista
+
+intro_task:
+  description: >
+    Using the following user preference and background, write a concise first-person self introduction as if you are the user.
+    Include relevant technical background, education, internships, notable projects/papers, and personal hobbies if fitting.
+    Keep the tone professional yet personable. The current year is {current_year}.
+    User preference and bio:
+    {user_preference}
+  expected_output: >
+    A polished self introduction in first person, 2-4 paragraphs, suitable for a personal website or professional profile. Formatted as markdown without '```'.
+  agent: reporting_analyst

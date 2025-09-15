@@ -62,16 +62,28 @@ class MitAiStudio():
             config=self.tasks_config['brew_task'], # type: ignore[index]
             output_file='brew_advice.txt'
         )
+    
+    @task
+    def intro_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['intro_task'], # type: ignore[index]
+            output_file='intro.md'
+        )
 
     @crew
-    def crew(self) -> Crew:
+    def crew(self, tasks: tuple[str, ...] | None = None) -> Crew:
         """Creates the MitAiStudio crew"""
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 
+        selected_tasks = (
+            [getattr(self, task_name)() for task_name in tasks]
+            if tasks is not None else self.tasks
+        )
+
         return Crew(
             agents=self.agents, # Automatically created by the @agent decorator
-            tasks=self.tasks, # Automatically created by the @task decorator
+            tasks=selected_tasks, # Use filtered tasks if provided
             process=Process.sequential,
             verbose=True,
             # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/

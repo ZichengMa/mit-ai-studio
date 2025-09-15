@@ -17,14 +17,23 @@ def run():
     """
     Run the crew.
     """
-    topic = input("Please input you question about brewing coffee or do you want me to give an introduction?: \n input: ")
+    with open('./knowledge/user_preference.txt', 'r') as f:
+        user_pref = f.read()
+
+    topic = input("If you want to get coffee brewing advice, please enter `brewing: <your coffee requirement>\nIf you want to get self introduction, please enter `self introduction`\nPlease enter your request here: ")
     inputs = {
         'topic': topic,
-        'current_year': str(datetime.now().year)
+        'current_year': str(datetime.now().year),
+        'user_preference': user_pref
     }
-    
+
+    if "self introduction" in topic:
+        tasks = ("intro_task",)
+    else:
+        tasks = ("research_task", "brew_task")
+
     try:
-        MitAiStudio().crew().kickoff(inputs=inputs)
+        MitAiStudio().crew(tasks=tasks).kickoff(inputs=inputs)
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
