@@ -15,3 +15,14 @@ reporting_task:
     A fully fledged report with the main topics, each with a full section of information.
     Formatted as markdown without '```'
   agent: reporting_analyst
+
+
+brew_task:
+  description: >
+    Review the context you got and give brewing suggestion.
+    Make sure the suggestion is detailed and contains any and all relevant information.
+  expected_output: >
+    A brewing recipe with detailed factos. Including water temprature, how many section of brewing, 
+    each section's time of brewing, whether to water in a circular pattern or not.
+    Formatted as markdown without '```'
+  agent: barista

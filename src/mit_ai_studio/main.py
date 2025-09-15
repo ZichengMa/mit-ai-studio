@@ -17,8 +17,9 @@ def run():
     """
     Run the crew.
     """
+    topic = input("Please input you question about brewing coffee or do you want me to give an introduction?: \n input: ")
     inputs = {
-        'topic': 'AI LLMs',
+        'topic': topic,
         'current_year': str(datetime.now().year)
     }
     

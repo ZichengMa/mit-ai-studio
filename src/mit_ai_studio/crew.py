@@ -33,6 +33,13 @@ class MitAiStudio():
             verbose=True
         )
 
+    @agent
+    def barista(self) -> Agent:
+        return Agent(
+            config=self.agents_config['barista'], # type: ignore[index]
+            verbose=True
+        )
+
     # To learn more about structured task outputs,
     # task dependencies, and task callbacks, check out the documentation:
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
@@ -42,11 +49,18 @@ class MitAiStudio():
             config=self.tasks_config['research_task'], # type: ignore[index]
         )
 
+    # @task
+    # def reporting_task(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config['reporting_task'], # type: ignore[index]
+    #         output_file='report.md'
+    #     )
+
     @task
-    def reporting_task(self) -> Task:
+    def brew_task(self) -> Task:
         return Task(
-            config=self.tasks_config['reporting_task'], # type: ignore[index]
-            output_file='report.md'
+            config=self.tasks_config['brew_task'], # type: ignore[index]
+            output_file='brew_advice.txt'
         )
 
     @crew
