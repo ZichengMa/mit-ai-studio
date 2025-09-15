@@ -1,54 +1,60 @@
 # MitAiStudio Crew
 
-Welcome to the MitAiStudio Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+A small multi-agent project powered by crewAI with two task types:
+- Coffee brewing advice (outputs `brew_advice.txt`)
+- First-person self-introduction (outputs `intro.md`, grounded in `knowledge/user_preference.txt`)
 
-## Installation
+## How to Run
 
-Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
+Prerequisites:
+- Python >= 3.10 and < 3.14
+- [UV](https://docs.astral.sh/uv/) installed for dependency management
+- `OPENAI_API_KEY` set in a `.env` file at the project root
 
-First, if you haven't already, install uv:
-
+Install dependencies:
 ```bash
 pip install uv
+uv sync
 ```
 
-Next, navigate to your project directory and install the dependencies:
-
-(Optional) Lock the dependencies and install them by using the CLI command:
+Run the interactive flow:
 ```bash
-crewai install
+uv run run_crew
 ```
-### Customizing
+When prompted, enter:
+- For brewing advice: `brewing: <your requirement>`
+- For self introduction: `self introduction`
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+Outputs:
+- Self introduction: `intro.md`
+- Brewing advice: `brew_advice.txt`
 
-- Modify `src/mit_ai_studio/config/agents.yaml` to define your agents
-- Modify `src/mit_ai_studio/config/tasks.yaml` to define your tasks
-- Modify `src/mit_ai_studio/crew.py` to add your own logic, tools and specific args
-- Modify `src/mit_ai_studio/main.py` to add custom inputs for your agents and tasks
+## Configuration
 
-## Running the Project
+- Agents: `src/mit_ai_studio/config/agents.yaml`
+- Tasks: `src/mit_ai_studio/config/tasks.yaml`
+- Crew assembly: `src/mit_ai_studio/crew.py`
+- Entry logic and inputs: `src/mit_ai_studio/main.py`
+- User preferences and bio: `knowledge/user_preference.txt`
 
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
+## What worked
 
-```bash
-$ crewai run
-```
+- Added `intro_task` in `tasks.yaml` with `description` and `expected_output`, referencing `{user_preference}` as context.
+- In `crew.py`:
+  - Switched `intro_task` to use `self.tasks_config['intro_task']` and set `output_file='intro.md'`.
+  - Updated `crew()` to accept an optional `tasks` parameter to filter tasks by method name, enabling the one-task "self introduction" path.
+- After running interactively, successfully produced:
+  - `intro.md` (first-person intro grounded by `knowledge/user_preference.txt`)
+  - `brew_advice.txt` (reproducible pour-over recipe based on requirements)
 
-This command initializes the mit-ai-studio Crew, assembling the agents and assigning them tasks as defined in your configuration.
+## What didn’t
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+- Initially creating a `Task` inline in `crew.py` without `expected_output` caused a Pydantic validation error.
+- Running via `crewai run` failed because the global CLI wasn’t available on PATH; using `uv run run_crew` works.
+- `MitAiStudio().crew(tasks=tasks)` first failed with `unexpected keyword argument 'tasks'` because `@crew` method didn’t accept parameters; now `crew()` supports an optional `tasks` argument and applies filtering.
 
-## Understanding Your Crew
+## What we learned
 
-The mit-ai-studio Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
-
-## Support
-
-For support, questions, or feedback regarding the MitAiStudio Crew or crewAI.
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
-
-Let's create wonders together with the power and simplicity of crewAI.
+- Defining `Task` via YAML is more robust in crewAI; ensure required fields like `description` and `expected_output` are present.
+- When using the `@crew` decorator for auto-assembled tasks, dynamic selection can be supported by adding an optional parameter in `crew()` to build a filtered task list.
+- Prefer running with UV (`uv run run_crew`) to avoid relying on a global `crewai` CLI.
