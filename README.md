@@ -29,6 +29,53 @@ Outputs:
 - Self introduction: `intro.md`
 - Brewing advice: `brew_advice.txt`
 
+## Deploy via NANDA (EC2)
+
+Expose this Crew as an internet-facing agent using the NANDA adapter.
+
+Prereqs on EC2 (Amazon Linux/AL2023):
+- `sudo dnf update -y && sudo dnf install -y python3.11 python3.11-pip certbot`
+- Point your domain `A` record to the EC2 public IP.
+
+Install deps with UV (includes `nanda-adapter` via `pyproject.toml`):
+```bash
+uv sync
+```
+
+Generate SSL certs (replace `your.domain.com`):
+```bash
+sudo certbot certonly --standalone -d your.domain.com
+sudo cp -L /etc/letsencrypt/live/your.domain.com/fullchain.pem .
+sudo cp -L /etc/letsencrypt/live/your.domain.com/privkey.pem .
+sudo chown $USER:$USER fullchain.pem privkey.pem
+chmod 600 fullchain.pem privkey.pem
+```
+
+Export environment variables:
+```bash
+export OPENAI_API_KEY=xxx              # CrewAI models
+export ANTHROPIC_API_KEY=xxx           # NANDA registry/bridge
+export DOMAIN_NAME=your.domain.com     # SSL + public URL
+```
+
+Start the NANDA bridge:
+```bash
+uv run nanda_mit_ai_studio
+# or run in background
+nohup uv run nanda_mit_ai_studio > out.log 2>&1 &
+```
+
+Check health and enrollment link:
+```bash
+curl -k https://$DOMAIN_NAME/api/health
+cat out.log  # enrollment link appears here
+```
+
+Message routing:
+- `self introduction` → runs `intro_task` (uses `knowledge/user_preference.txt`)
+- `brewing: <your requirement>` → runs `research_task` then `brew_task`
+- other text → runs `research_task` only
+
 ## Configuration
 
 - Agents: `src/mit_ai_studio/config/agents.yaml`

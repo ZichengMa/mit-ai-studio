@@ -5,7 +5,8 @@ description = "mit-ai-studio using crewAI"
 authors = [{ name = "Your Name", email = "you@example.com" }]
 requires-python = ">=3.10,<3.14"
 dependencies = [
-    "crewai[tools]>=0.186.1,<1.0.0"
+    "crewai[tools]>=0.186.1,<1.0.0",
+    "nanda-adapter"
 ]
 
 [project.scripts]
@@ -14,6 +15,7 @@ run_crew = "mit_ai_studio.main:run"
 train = "mit_ai_studio.main:train"
 replay = "mit_ai_studio.main:replay"
 test = "mit_ai_studio.main:test"
+nanda_mit_ai_studio = "mit_ai_studio.nanda_bridge:main"
 
 [build-system]
 requires = ["hatchling"]
